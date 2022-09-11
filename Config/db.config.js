@@ -44,6 +44,14 @@ dbConn.connect(function(err) {
   if (err) {
     console.log("Database did not connect");
     console.log("host:" + process.env.DBHOST, process.env.DBPORT)
+    console.log(process.env.DBUSER)
+    console.log(process.env.DBPASSWORD)
+    console.log(process.env.DBDATABASE)
+    console.log(process.env.EMAIL)
+    console.log(process.env.EMAILKEY)
+    console.log(process.env.SECRETE)
+    console.log(process.env.SESSIONSECRETE)
+    console.log(process.env.SESSIONTABLE)
   }else{
     console.log("Database Connected!");
   }
