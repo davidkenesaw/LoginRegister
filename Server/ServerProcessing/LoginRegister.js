@@ -1,7 +1,3 @@
-//000859536
-//David VanAsselberg
-//9/5/2022
-
 const {dbConn} = require('../../Config/db.config');
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
@@ -23,7 +19,7 @@ function LogUserIn(req,res){//not done
             if(rows.length == 1){
                 bcrypt.compare(Password,rows[0].Password, function(err, result) {
                     if(result == true){
-                        req.session.Username = rows[0].UserName;
+                        req.session.UserName = rows[0].UserName;
                         req.session.FirstName = rows[0].FirstName;
                         req.session.LastName = rows[0].LastName;
                         req.session.Major = rows[0].Major;
@@ -73,4 +69,25 @@ function insertUser(req,res){
     });
 }
 
-module.exports = {LogUserIn,insertUser}
+//chech for user code
+
+function checkCodeEntered(req,res){
+    const crackedCode = req.session.Code;
+    const user = req.body.code;
+
+    if(user == crackedCode){//code correct redirect to homepage
+        res.redirect("/Homepage");
+    }else{//not correct
+        const error = "code incorrect"; 
+        res.render("CodePage",{error})
+    }
+}
+
+//middleware
+function RequireLogin(req, res, next){
+    if(!req.session.UserName){
+        return res.redirect('/LoginPage')
+    }next()
+}
+
+module.exports = {LogUserIn,insertUser,checkCodeEntered,RequireLogin}

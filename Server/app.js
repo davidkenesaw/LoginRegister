@@ -1,7 +1,3 @@
-//000859536
-//David VanAsselberg
-//9/5/2022
-
 //require statements
 const path = require('path')
 require('dotenv').config({ 
@@ -10,7 +6,7 @@ require('dotenv').config({
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const {LogUserIn,insertUser} = require('./ServerProcessing/LoginRegister')
+const {LogUserIn,insertUser,checkCodeEntered,RequireLogin} = require('./ServerProcessing/LoginRegister')
 const {sendEmail} = require('./ServerProcessing/email')
 const {seshOption} = require('../Config/db.config')
 
@@ -48,27 +44,16 @@ app.get('/CodePage',function(req,res){//enter in a code page
 app.get('/UserRegistered',function(req,res){//page displaying user is registered
     res.render('Registered');
 });
-app.get("/Homepage",function(req,res){//homepage
+app.get("/Homepage",RequireLogin,function(req,res){//homepage
     res.render("homepage");
 });
 
 //http post requests
 app.post("/Login",LogUserIn)//login functionality
-app.post('/CompleteLogin',function(req,res){//check to see if code is correct
-    
-    const crackedCode = req.session.Code;
-    const user = req.body.code;
-
-    if(user == crackedCode){//code correct redirect to homepage
-        res.redirect("/Homepage");
-    }else{//not correct
-        const error = "code incorrect"; 
-        res.render("CodePage",{error})
-    }
-});
+app.post('/CompleteLogin',checkCodeEntered);
 app.post("/Register",insertUser)//register functionality
 app.post("/SignOut",function(req,res){
-    res.session.user_id = null;
+    req.session.UserName = null;
     res.redirect('/LoginPage');
 })
 app.post("/SendAgain",(req,res)=>{//send code again
