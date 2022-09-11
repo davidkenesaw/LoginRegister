@@ -6,7 +6,10 @@ const path = require('path')
 require('dotenv').config({ 
     path: path.resolve(__dirname, '../.env') 
 })
-const mysql = require('mysql2');
+const mysql = require('mysql');
+const session = require('express-session')
+const mysqlStore = require('express-mysql-session')(session)
+
 //cloud mysql db connection
 const dbConn = mysql.createConnection({
   host     : process.env.DBHOST,
@@ -15,6 +18,30 @@ const dbConn = mysql.createConnection({
   password : process.env.DBPASSWORD,
   database : process.env.DBDATABASE
 });
+
+const sessionStore = new mysqlStore({
+  expiration: 10800000,
+  creatDatabaseTable: true,
+  schema: { 
+    tableName:process.env.SESSIONTABLE,
+    columnNames:{
+      session_id: "session_id",
+      expires:"expires",
+      data:"data"
+    }
+  }
+},dbConn)
+
+const seshOption = session({
+  key:"keyin",
+  secret:process.env.SESSIONSECRETE,
+  store:sessionStore,
+  resave: false,
+  saveUninitialized:true
+})
+
+
+
 //check if database gets connected
 dbConn.connect(function(err) {
   if (err) {
@@ -27,4 +54,4 @@ dbConn.connect(function(err) {
 
 
 
-module.exports = dbConn;
+module.exports = {dbConn,seshOption};

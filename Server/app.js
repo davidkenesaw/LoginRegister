@@ -10,8 +10,8 @@ require('dotenv').config({
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const {LogUserIn,insertUser} = require('./db.functions')
-const {sendEmail} = require('../Config/email.config')
+const {LogUserIn,insertUser} = require('./ServerProcessing/LoginRegister')
+const {sendEmail} = require('./ServerProcessing/email')
 
 //configre express app
 const app = express();

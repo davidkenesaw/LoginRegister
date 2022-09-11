@@ -12,21 +12,4 @@ const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.EMAILKEY)
 
 
-//send an email
-function sendEmail(To, code){
-    const msg = {
-        to: To, 
-        from: process.env.EMAIL, 
-        subject: 'Authentication',
-        text: 'Type in the code:' + code + ", to authenticate"
-    }
-    sgMail.send(msg).then(() => {
-        console.log('Email sent')
-    })
-    .catch((error) => {
-        console.error(error)
-    })
-}
-
-
-module.exports = {sendEmail}
+module.exports = {sgMail}

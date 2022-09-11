@@ -2,8 +2,8 @@
 //David VanAsselberg
 //9/5/2022
 
-const dbConn = require('../Config/db.config');
-const {sendEmail} = require('../Config/email.config')
+const {dbConn} = require('../../Config/db.config');
+
 
 //function to log user in
 function LogUserIn(req,res){//not done
