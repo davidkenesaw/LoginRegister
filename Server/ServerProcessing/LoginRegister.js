@@ -89,5 +89,10 @@ function RequireLogin(req, res, next){
         return res.redirect('/LoginPage')
     }next()
 }
+function IsLoggedIn(req, res, next){
+    if(req.session.UserName){
+        return res.redirect('/Homepage')
+    }next()
+}
 
-module.exports = {LogUserIn,insertUser,checkCodeEntered,RequireLogin}
+module.exports = {LogUserIn,insertUser,checkCodeEntered,RequireLogin,IsLoggedIn}
