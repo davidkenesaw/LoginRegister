@@ -43,9 +43,9 @@ const seshOption = session({
 dbConn.connect(function(err) {
   if (err) {
     console.log("Database did not connect");
+    console.log("host:" + process.env.DBHOST, process.env.DBPORT)
   }else{
     console.log("Database Connected!");
-    console.log("host:" + process.env.DBHOST, process.env.DBPORT)
   }
   
 });
