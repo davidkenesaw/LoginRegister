@@ -15,6 +15,7 @@ const dbConn = mysql.createConnection({
   database : process.env.DBDATABASE
 });
 
+//session
 const sessionStore = new mysqlStore({
   expiration: 10800000,
   creatDatabaseTable: true,
