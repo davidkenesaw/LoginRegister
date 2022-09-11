@@ -12,9 +12,11 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const {LogUserIn,insertUser} = require('./ServerProcessing/LoginRegister')
 const {sendEmail} = require('./ServerProcessing/email')
+const {seshOption} = require('../Config/db.config')
 
 //configre express app
 const app = express();
+app.use(seshOption)
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
