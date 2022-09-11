@@ -14,7 +14,7 @@ const dbConn = mysql.createConnection({
   password : process.env.DBPASSWORD,
   database : process.env.DBDATABASE
 });
-console.log("host:" + process.env.DBHOST, process.env.DBPORT)
+
 //session
 const sessionStore = new mysqlStore({
   expiration: 10800000,
@@ -45,6 +45,7 @@ dbConn.connect(function(err) {
     console.log("Database did not connect");
   }else{
     console.log("Database Connected!");
+    console.log("host:" + process.env.DBHOST, process.env.DBPORT)
   }
   
 });
