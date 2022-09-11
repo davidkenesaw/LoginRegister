@@ -16,7 +16,6 @@ const {seshOption} = require('../Config/db.config')
 
 //configre express app
 const app = express();
-app.use(seshOption)
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
@@ -24,6 +23,7 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 app.use(cookieParser(process.env.SECRETE));//change this and make it secrete
 app.set('views', path.join(__dirname, '../Client/views'));
+app.use(seshOption)
 
 //get Pages
 app.get("/",function(req,res){//landing page
@@ -39,8 +39,8 @@ app.get("/RegisterPage",function(req,res){//register page
 });
 app.get('/CodePage',function(req,res){//enter in a code page
     const randomNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
-    res.cookie('RegisterSecrete',randomNumber,{signed:true});
-    sendEmail(req.signedCookies.Email,randomNumber)
+    req.session.Code = randomNumber
+    sendEmail(req.session.Email,randomNumber)
     
     const error = "";
     res.render('CodePage', { error });
@@ -49,21 +49,17 @@ app.get('/UserRegistered',function(req,res){//page displaying user is registered
     res.render('Registered');
 });
 app.get("/Homepage",function(req,res){//homepage
-    const user = req.cookies.UserName;
-    res.render("homepage",{user});
+    res.render("homepage");
 });
 
 //http post requests
 app.post("/Login",LogUserIn)//login functionality
 app.post('/CompleteLogin',function(req,res){//check to see if code is correct
     
-    const crackedCode = req.signedCookies.RegisterSecrete;
+    const crackedCode = req.session.Code;
     const user = req.body.code;
 
     if(user == crackedCode){//code correct redirect to homepage
-        res.clearCookie("RegisterSecrete");
-        res.clearCookie("Email");
-        res.cookie("loginID", "865843765",{signed:true});
         res.redirect("/Homepage");
     }else{//not correct
         const error = "code incorrect"; 
@@ -71,6 +67,10 @@ app.post('/CompleteLogin',function(req,res){//check to see if code is correct
     }
 });
 app.post("/Register",insertUser)//register functionality
+app.post("/SignOut",function(req,res){
+    res.session.user_id = null;
+    res.redirect('/LoginPage');
+})
 app.post("/SendAgain",(req,res)=>{//send code again
     const error = "code sent"; 
     res.redirect('/CodePage');

@@ -37,7 +37,7 @@ const seshOption = session({
   secret:process.env.SESSIONSECRETE,
   store:sessionStore,
   resave: false,
-  saveUninitialized:true
+  saveUninitialized:false
 })
 
 

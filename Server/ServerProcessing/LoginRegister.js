@@ -22,12 +22,13 @@ function LogUserIn(req,res){//not done
         else{//log user in the redirect to Codepage
             if(rows.length == 1){
                 bcrypt.compare(Password,rows[0].Password, function(err, result) {
-                    console.log(Password)
-                    console.log(result)
                     if(result == true){
-                        res.cookie('Email',rows[0].Email,{signed:true});
+                        req.session.Username = rows[0].UserName;
+                        req.session.FirstName = rows[0].FirstName;
+                        req.session.LastName = rows[0].LastName;
+                        req.session.Major = rows[0].Major;
+                        req.session.Email = rows[0].Email;
                         console.log(rows[0].Email)
-                        res.cookie('UserName',rows[0].UserName);
                         res.redirect('/CodePage');
                     }else{
                         const error = "Password is wrong";
