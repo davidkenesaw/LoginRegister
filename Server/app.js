@@ -58,7 +58,6 @@ app.post("/SignOut",function(req,res){
     res.redirect('/');
 })
 app.post("/SendAgain",(req,res)=>{//send code again
-    const error = "code sent"; 
     res.redirect('/CodePage');
     
 })
