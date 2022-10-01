@@ -24,6 +24,7 @@ function LogUserIn(req,res){//not done
                         req.session.LastName = rows[0].LastName;
                         req.session.Major = rows[0].Major;
                         req.session.Email = rows[0].Email;
+                        req.session.loggedIn = false;
                         console.log(rows[0].Email)
                         res.redirect('/CodePage');
                     }else{
@@ -76,6 +77,7 @@ function checkCodeEntered(req,res){
     const user = req.body.code;
 
     if(user == crackedCode){//code correct redirect to homepage
+        req.session.loggedIn = true;
         res.redirect("/Homepage");
     }else{//not correct
         const error = "code incorrect"; 
@@ -85,12 +87,12 @@ function checkCodeEntered(req,res){
 
 //middleware
 function RequireLogin(req, res, next){
-    if(!req.session.UserName){
+    if(!req.session.loggedIn){
         return res.redirect('/LoginPage')
     }next()
 }
 function IsLoggedIn(req, res, next){
-    if(req.session.UserName){
+    if(req.session.loggedIn){
         return res.redirect('/Homepage')
     }next()
 }
