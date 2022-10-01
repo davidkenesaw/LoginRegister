@@ -4,7 +4,7 @@ require('dotenv').config({
     path: path.resolve(__dirname, '../.env') 
 })
 const express = require("express");
-const bodyParser = require("body-parser");
+
 const cookieParser = require('cookie-parser');
 const {LogUserIn,insertUser,checkCodeEntered,RequireLogin,IsLoggedIn} = require('./ServerProcessing/LoginRegister')
 const {sendEmail} = require('./ServerProcessing/email')
