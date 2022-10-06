@@ -57,13 +57,16 @@ app.post("/Login",LogUserIn)//login functionality
 app.post('/CompleteLogin',checkCodeEntered);
 app.post("/Register",insertUser)//register functionality
 app.post("/SignOut",function(req,res){
+
     req.session.UserName = null;
     //set users session username to null 
+
+    req.session.loggedIn = false;
+
     res.redirect('/');
 })
 app.post("/SendAgain",(req,res)=>{//send code again
     res.redirect('/CodePage');
-    
 })
 
 app.listen(process.env.PORT || 3456,function(){//host site

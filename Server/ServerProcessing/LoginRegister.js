@@ -25,6 +25,7 @@ function LogUserIn(req,res){//not done
                         req.session.Major = rows[0].Major;
                         req.session.Email = rows[0].Email;
                         //add user info to users session
+                        req.session.loggedIn = false;
                         console.log(rows[0].Email)
                         res.redirect('/CodePage');
                     }else{
@@ -78,6 +79,7 @@ function checkCodeEntered(req,res){
     const user = req.body.code;
 
     if(user == crackedCode){//code correct redirect to homepage
+        req.session.loggedIn = true;
         res.redirect("/Homepage");
     }else{
         const error = "code incorrect"; 
@@ -87,14 +89,22 @@ function checkCodeEntered(req,res){
 
 //middleware
 function RequireLogin(req, res, next){
+<<<<<<< HEAD
     //if user in sot loggen in the the user will be redirected to log in page
     if(!req.session.UserName){
+=======
+    if(!req.session.loggedIn){
+>>>>>>> 545931b0f0c0dad4bb38b1c580bb744235df742f
         return res.redirect('/LoginPage')
     }next()
 }
 function IsLoggedIn(req, res, next){
+<<<<<<< HEAD
     //if user is logged in then user will be redirected to logged in homepage
     if(req.session.UserName){
+=======
+    if(req.session.loggedIn){
+>>>>>>> 545931b0f0c0dad4bb38b1c580bb744235df742f
         return res.redirect('/Homepage')
     }next()
 }
