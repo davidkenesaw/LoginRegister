@@ -89,22 +89,18 @@ function checkCodeEntered(req,res){
 
 //middleware
 function RequireLogin(req, res, next){
-<<<<<<< HEAD
+
     //if user in sot loggen in the the user will be redirected to log in page
     if(!req.session.UserName){
-=======
+
     if(!req.session.loggedIn){
->>>>>>> 545931b0f0c0dad4bb38b1c580bb744235df742f
         return res.redirect('/LoginPage')
     }next()
 }
 function IsLoggedIn(req, res, next){
-<<<<<<< HEAD
     //if user is logged in then user will be redirected to logged in homepage
     if(req.session.UserName){
-=======
     if(req.session.loggedIn){
->>>>>>> 545931b0f0c0dad4bb38b1c580bb744235df742f
         return res.redirect('/Homepage')
     }next()
 }
