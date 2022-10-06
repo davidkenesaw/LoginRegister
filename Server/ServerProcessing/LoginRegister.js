@@ -91,7 +91,7 @@ function checkCodeEntered(req,res){
 function RequireLogin(req, res, next){
 
     //if user in sot loggen in the the user will be redirected to log in page
-    if(!req.session.UserName){
+    
 
     if(!req.session.loggedIn){
         return res.redirect('/LoginPage')
@@ -99,7 +99,7 @@ function RequireLogin(req, res, next){
 }
 function IsLoggedIn(req, res, next){
     //if user is logged in then user will be redirected to logged in homepage
-    if(req.session.UserName){
+    
     if(req.session.loggedIn){
         return res.redirect('/Homepage')
     }next()
