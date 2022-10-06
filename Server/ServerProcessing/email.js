@@ -3,6 +3,7 @@
 const {sgMail} = require('../../Config/email.config')
 
 function sendEmail(To, code){
+    //function that sends email of code to user
     const msg = {
         to: To, 
         from: process.env.EMAIL, 

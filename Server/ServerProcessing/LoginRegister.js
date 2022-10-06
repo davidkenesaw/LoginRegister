@@ -18,12 +18,13 @@ function LogUserIn(req,res){//not done
         else{//log user in the redirect to Codepage
             if(rows.length == 1){
                 bcrypt.compare(Password,rows[0].Password, function(err, result) {
-                    if(result == true){
+                    if(result == true){//if logged in is successful
                         req.session.UserName = rows[0].UserName;
                         req.session.FirstName = rows[0].FirstName;
                         req.session.LastName = rows[0].LastName;
                         req.session.Major = rows[0].Major;
                         req.session.Email = rows[0].Email;
+                        //add user info to users session
                         console.log(rows[0].Email)
                         res.redirect('/CodePage');
                     }else{
@@ -60,10 +61,10 @@ function insertUser(req,res){
             //if an error occures
             if(err){
                 const error = "User Taken";
-                res.render('Register',{error});//this is wrong
+                res.render('Register',{error});
             }else{//register user
                 console.log("Data inserted");
-                res.redirect("/UserRegistered");//this is wrong
+                res.redirect("/UserRegistered");
             }
         });
     });
@@ -73,11 +74,12 @@ function insertUser(req,res){
 
 function checkCodeEntered(req,res){
     const crackedCode = req.session.Code;
+    //get code from users session
     const user = req.body.code;
 
     if(user == crackedCode){//code correct redirect to homepage
         res.redirect("/Homepage");
-    }else{//not correct
+    }else{
         const error = "code incorrect"; 
         res.render("CodePage",{error})
     }
@@ -85,11 +87,13 @@ function checkCodeEntered(req,res){
 
 //middleware
 function RequireLogin(req, res, next){
+    //if user in sot loggen in the the user will be redirected to log in page
     if(!req.session.UserName){
         return res.redirect('/LoginPage')
     }next()
 }
 function IsLoggedIn(req, res, next){
+    //if user is logged in then user will be redirected to logged in homepage
     if(req.session.UserName){
         return res.redirect('/Homepage')
     }next()

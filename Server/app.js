@@ -12,15 +12,15 @@ const {seshOption} = require('../Config/db.config')
 
 //configre express app
 const app = express();
-app.set('view engine','ejs');
+app.set('view engine','ejs');//use ejs
 app.use(express.urlencoded({ extended: true }));
-app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
-app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
-app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))//add bootsrap css
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))//add bootsrap javascript
+app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))//add bootsrap jquery
 app.use(cookieParser(process.env.SECRETE));//change this and make it secrete
-app.set('views', path.join(__dirname, '../Client/views'));
-app.use(express.static(path.join(__dirname, '../Client')));
-app.use(seshOption)
+app.set('views', path.join(__dirname, '../Client/views'));//show express the views directory
+app.use(express.static(path.join(__dirname, '../Client')));//show express the Client directory
+app.use(seshOption)//configuration for express session
 
 //get Pages
 app.get("/", IsLoggedIn,function(req,res){//landing page
@@ -36,8 +36,11 @@ app.get("/RegisterPage",function(req,res){//register page
 });
 app.get('/CodePage',function(req,res){//enter in a code page
     const randomNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
+    //10 digit random number
     req.session.Code = randomNumber
+    //add code to users session
     sendEmail(req.session.Email,randomNumber)
+    //send email of code to user 
     
     const error = "";
     res.render('CodePage', { error });
@@ -55,6 +58,7 @@ app.post('/CompleteLogin',checkCodeEntered);
 app.post("/Register",insertUser)//register functionality
 app.post("/SignOut",function(req,res){
     req.session.UserName = null;
+    //set users session username to null 
     res.redirect('/');
 })
 app.post("/SendAgain",(req,res)=>{//send code again
