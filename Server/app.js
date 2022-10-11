@@ -6,7 +6,7 @@ require('dotenv').config({
 const express = require("express");
 
 const cookieParser = require('cookie-parser');
-const {LogUserIn,insertUser,checkCodeEntered,RequireLogin,IsLoggedIn} = require('./ServerProcessing/LoginRegister')
+const {LogUserIn,insertUser,checkCodeEntered,RequireLogin,IsLoggedIn,FindUsername,checkCodeEnteredFP,changePass} = require('./ServerProcessing/LoginRegister')
 const {sendEmail} = require('./ServerProcessing/email')
 const {seshOption} = require('../Config/db.config')
 
@@ -51,6 +51,25 @@ app.get('/UserRegistered',function(req,res){//page displaying user is registered
 app.get("/Homepage",RequireLogin,function(req,res){//homepage
     res.render("homeLoggedIn");
 });
+app.get("/ForgotPasswordUserNamePage",function(req,res){//homepage
+    const error = "";
+    res.render("ForgotPasswordUserName",{error});
+});
+app.get("/ForgotPasswordCodePage",function(req,res){//homepage
+    const randomNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
+    //10 digit random number
+    req.session.CodeFP = randomNumber
+    //add code to users session
+    sendEmail(req.session.Email,randomNumber)
+    //send email of code to user 
+    
+    const error = "";
+    res.render('CodePageFP', { error });
+});
+app.get("/ForgotPasswordPage",function(req,res){//homepage
+    const error = "";
+    res.render("ChangePassword",{error});
+});
 
 //http post requests
 app.post("/Login",LogUserIn)//login functionality
@@ -68,6 +87,12 @@ app.post("/SignOut",function(req,res){
 app.post("/SendAgain",(req,res)=>{//send code again
     res.redirect('/CodePage');
 })
+app.post("/ConfirmUserName",FindUsername)
+app.post("/ConfirmFPCode",checkCodeEnteredFP)
+app.post("/SendCodeFPAgain",(req,res)=>{//send code again
+    res.redirect('/ForgotPasswordCodePage');
+})
+app.post("/ChangePass",changePass)
 
 app.listen(process.env.PORT || 3456,function(){//host site
     console.log("Port: 3456");

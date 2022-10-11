@@ -105,4 +105,71 @@ function IsLoggedIn(req, res, next){
     }next()
 }
 
-module.exports = {LogUserIn,insertUser,checkCodeEntered,RequireLogin,IsLoggedIn}
+
+function FindUsername(req,res){
+    const user = req.body.Username;
+    
+    //database query
+    dbConn.query("SELECT * FROM Users WHERE UserName = ?",[user],function(err,rows){
+        
+        //if an error occures
+        if(err){
+            const error = "there was an issue with your username";
+            res.render('ForgotPasswordUserName',{error});
+        }
+        else{//log user in the redirect to Codepage
+            if(rows.length == 1){
+                req.session.UserName = rows[0].UserName;
+                req.session.FirstName = rows[0].FirstName;
+                req.session.LastName = rows[0].LastName;
+                req.session.Major = rows[0].Major;
+                req.session.Email = rows[0].Email;
+                req.session.CreatedPass = false;
+                res.redirect("/ForgotPasswordCodePage")
+                
+            }else{//could not find user
+                const error = "issue with username";
+                res.render('ForgotPasswordUserName',{error});//this is wrong
+            }
+        }
+
+    });
+}
+
+function checkCodeEnteredFP(req,res){
+    const crackedCode = req.session.CodeFP;
+    //get code from users session
+    const user = req.body.code;
+
+    if(user == crackedCode){//code correct redirect to homepage
+        res.redirect("/ForgotPasswordPage");
+    }else{
+        const error = "code incorrect"; 
+        res.render("CodePageFP",{error})
+    }
+}
+
+
+function changePass(req,res){
+
+    const UserName = req.session.UserName;
+    const Password = req.body.Password;
+
+    //encrypt 
+    bcrypt.hash(Password, saltRounds, function(err, hash) {
+    //database query
+        dbConn.query("UPDATE Users SET Password = ? WHERE UserName = ?",[hash,UserName],function(err,result){
+        
+            //if an error occures
+            if(err){
+                const error = "Could not change password";
+                res.render('ChangePassword',{error});
+            }else{//register user
+                req.session.CreatedPass = true;
+                console.log("Password Changed");
+                res.redirect("/");
+            }
+        });
+    });
+}
+module.exports = {LogUserIn,insertUser,checkCodeEntered,RequireLogin,IsLoggedIn,FindUsername,checkCodeEnteredFP,changePass}
