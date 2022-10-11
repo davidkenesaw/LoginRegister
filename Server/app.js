@@ -87,12 +87,12 @@ app.post("/SignOut",function(req,res){
 app.post("/SendAgain",(req,res)=>{//send code again
     res.redirect('/CodePage');
 })
-app.post("/ConfirmUserName",FindUsername)
-app.post("/ConfirmFPCode",checkCodeEnteredFP)
-app.post("/SendCodeFPAgain",(req,res)=>{//send code again
+app.post("/ConfirmUserName",FindUsername)//confim if this is the username for forgot password
+app.post("/ConfirmFPCode",checkCodeEnteredFP)//confirm forgot password code
+app.post("/SendCodeFPAgain",(req,res)=>{//send code again for forgot massword
     res.redirect('/ForgotPasswordCodePage');
 })
-app.post("/ChangePass",changePass)
+app.post("/ChangePass",changePass)//change the password
 
 app.listen(process.env.PORT || 3456,function(){//host site
     console.log("Port: 3456");

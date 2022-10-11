@@ -106,7 +106,7 @@ function IsLoggedIn(req, res, next){
 }
 
 
-function FindUsername(req,res){
+function FindUsername(req,res){//search for Username 
     const user = req.body.Username;
     
     //database query
@@ -117,7 +117,7 @@ function FindUsername(req,res){
             const error = "there was an issue with your username";
             res.render('ForgotPasswordUserName',{error});
         }
-        else{//log user in the redirect to Codepage
+        else{//found username
             if(rows.length == 1){
                 req.session.UserName = rows[0].UserName;
                 req.session.FirstName = rows[0].FirstName;
@@ -129,7 +129,7 @@ function FindUsername(req,res){
                 
             }else{//could not find user
                 const error = "issue with username";
-                res.render('ForgotPasswordUserName',{error});//this is wrong
+                res.render('ForgotPasswordUserName',{error});
             }
         }
 
@@ -141,7 +141,7 @@ function checkCodeEnteredFP(req,res){
     //get code from users session
     const user = req.body.code;
 
-    if(user == crackedCode){//code correct redirect to homepage
+    if(user == crackedCode){//code correct redirect forgot password page
         res.redirect("/ForgotPasswordPage");
     }else{
         const error = "code incorrect"; 
@@ -150,7 +150,7 @@ function checkCodeEnteredFP(req,res){
 }
 
 
-function changePass(req,res){
+function changePass(req,res){//change the password
 
     const UserName = req.session.UserName;
     const Password = req.body.Password;
@@ -164,7 +164,7 @@ function changePass(req,res){
             if(err){
                 const error = "Could not change password";
                 res.render('ChangePassword',{error});
-            }else{//register user
+            }else{
                 req.session.CreatedPass = true;
                 console.log("Password Changed");
                 res.redirect("/");
