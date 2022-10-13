@@ -1,3 +1,7 @@
+//000859536
+//David VanAsselberg
+//10/13/2022
+
 const {dbConn} = require('../../Config/db.config');
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
